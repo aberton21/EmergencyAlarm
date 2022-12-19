@@ -1,0 +1,27 @@
+[
+  {
+    "Sourcefile": "",
+    "Include": "",
+    "Includepath": "C:\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\cores\\arduino"
+  },
+  {
+    "Sourcefile": "",
+    "Include": "",
+    "Includepath": "C:\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\variants\\standard"
+  },
+  {
+    "Sourcefile": "c:\\Users\\Owner\\OneDrive\\Desktop\\Emergency_Audio\\build\\sketch\\sketch.ino.cpp",
+    "Include": "ezButton.h",
+    "Includepath": "C:\\Users\\Owner\\OneDrive\\Documents\\Arduino\\libraries\\ezButton\\src"
+  },
+  {
+    "Sourcefile": "c:\\Users\\Owner\\OneDrive\\Desktop\\Emergency_Audio\\build\\sketch\\sketch.ino.cpp",
+    "Include": "",
+    "Includepath": ""
+  },
+  {
+    "Sourcefile": "C:\\Users\\Owner\\OneDrive\\Documents\\Arduino\\libraries\\ezButton\\src\\ezButton.cpp",
+    "Include": "",
+    "Includepath": ""
+  }
+]
