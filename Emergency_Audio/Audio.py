@@ -62,10 +62,10 @@ while True:
 
         # Get current volume
         currentVolumeDb = volume.GetMasterVolumeLevel()
-        volume.SetMasterVolumeLevel(-48.0, None)
+        volume.SetMasterVolumeLevel(-0.0, None)
             
         i = 0
-        while i < 57:
+        while i < 112:
             playsound('emergency-alarm-with-reverb-29431.mp3')
             i += 1
         break
