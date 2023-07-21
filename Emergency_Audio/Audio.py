@@ -9,36 +9,15 @@ import psutil
 import os
 import subprocess
 import time
+import threading
 
 
-arduinoSerialData = serial.Serial('com3', 9600)
-
-audio = None
+arduinoSerialData = serial.Serial('com4', 9600)
 
 audio_file = "emergency-alarm-with-reverb-29431.mp3"
+file_path = r"C:\cniapserv\ID Badge Computer\Desktop\emergency-alarm-with-reverb-29431"
 
-def switch_on():
-    global audio
-    print("Alarm activated")
-
-    # Get default audio device using pycaw
-    devices = AudioUtilities.GetSpeakers()
-    interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
-    volume = cast(interface, POINTER(IAudioEndpointVolume))
-
-    # Get current volume
-    currentVolumeDb = volume.GetMasterVolumeLevel()
-    volume.SetMasterVolumeLevel(-48.0, None)
-
-    # Kill all running applications
-    os.system("pkill -f")
-    # subprocess.Popen("TASKKILL /F /IM chrome.exe 2> nul", shell=True)
-
-    # Play audio
-    audio = subprocess.Popen(["wmplayer.exe", audio_file])
-
-def switch_off():
-    print("Alarm deactivated")
+alarm_playing = False
 
 while True:
     myData = ''
@@ -50,10 +29,14 @@ while True:
         
     if myData == 'Switch: ON':
 
-        isOpen = "chrome.exe" in (i.name() for i in psutil.process_iter())
-        if (isOpen):
+        edgeOpen = "msedge.exe" in (i.name() for i in psutil.process_iter())
+        if (edgeOpen):
+            subprocess.Popen("TASKKILL /F /IM msedge.exe 2> nul", shell=True)
+        
+        chromeOpen = "chrome.exe" in (i.name() for i in psutil.process_iter())
+        if (chromeOpen):
             subprocess.Popen("TASKKILL /F /IM chrome.exe 2> nul", shell=True)
-                
+ 
                 
         # Get default audio device using pycaw
         devices = AudioUtilities.GetSpeakers()
@@ -62,10 +45,13 @@ while True:
 
         # Get current volume
         currentVolumeDb = volume.GetMasterVolumeLevel()
-        volume.SetMasterVolumeLevel(-0.0, None)
-            
-        i = 0
-        while i < 112:
-            playsound('emergency-alarm-with-reverb-29431.mp3')
-            i += 1
-        break
+        volume.SetMasterVolumeLevel(-50.0, None)
+
+        if not alarm_playing:
+            alarm_playing = True
+            playsound(audio_file) 
+    
+    elif myData == 'Switch: OFF':
+        if alarm_playing:
+            alarm_playing = False
+            subprocess.Popen("TASKKILL /F /IM wmplayer.exe 2> nul", shell=True)
