@@ -11,7 +11,7 @@ import subprocess
 
 alarm_sound = "emergency-alarm-with-reverb-29431.mp3"
 
-arduinoSerialData = serial.Serial('com3', 750)
+arduinoSerialData = serial.Serial('com3', 9600)
 
 alarm_playing = False
 
