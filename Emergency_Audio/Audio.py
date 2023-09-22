@@ -15,36 +15,45 @@ arduinoSerialData = serial.Serial('com3', 9600)
 
 alarm_playing = False
 
-while True:
-    myData = ''
-    if arduinoSerialData.inWaiting() > 0:
-        myData = arduinoSerialData.readline()
-        myData = str(myData,'utf-8')
-        myData = myData.strip('\r\n')            
-        print(myData)
-            
-        if myData == 'Switch: ON':
-            
-            isOpen = "chrome.exe" in (i.name() for i in psutil.process_iter())
-            if (isOpen):
-                subprocess.Popen("TASKKILL /F /IM chrome.exe 2> nul", shell=True)
-                    
-            # Get default audio device using pycaw
-            devices = AudioUtilities.GetSpeakers()
-            interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
-            volume = cast(interface, POINTER(IAudioEndpointVolume))
+try:
 
-            # Get current volume
-            currentVolumeDb = volume.GetMasterVolumeLevel()
-            volume.SetMasterVolumeLevel(-0.0, None)
-
-            # Check if the alarm is already playing
-            if not alarm_playing:
-                playsound(alarm_sound)
-                alarm_playing = True
+    while True:
+        myData = ''
+        if arduinoSerialData.inWaiting() > 0:
+            myData = arduinoSerialData.readline()
+            myData = str(myData,'utf-8')
+            myData = myData.strip('\r\n')            
+            print(myData)
                 
-        elif myData == 'Switch: OFF':
-            # Check if the alarm is currently playing
-            if alarm_playing:
-                alarm_playing = False
-                subprocess.Popen("TASKKILL /F /IM wmplayer.exe 2> nul", shell=True)
+            if myData == 'Switch: ON':
+                
+                isOpen = "chrome.exe" in (i.name() for i in psutil.process_iter())
+                if (isOpen):
+                    subprocess.Popen("TASKKILL /F /IM chrome.exe 2> nul", shell=True)
+                        
+                # Get default audio device using pycaw
+                devices = AudioUtilities.GetSpeakers()
+                interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
+                volume = cast(interface, POINTER(IAudioEndpointVolume))
+
+                # Get current volume
+                currentVolumeDb = volume.GetMasterVolumeLevel()
+                volume.SetMasterVolumeLevel(-0.0, None)
+
+                # Check if the alarm is already playing
+                if alarm_playing == False:
+                    playsound(alarm_sound)
+                    alarm_playing = True
+                
+            elif myData == 'Switch: OFF':
+                if alarm_playing == True:
+                    subprocess.Popen("start chrome.exe", shell=True)
+                    alarm_playing = False
+
+
+except KeyboardInterrupt:
+    print("Keyboard Interrupt")
+    # Open Google Chrome
+    subprocess.Popen("start chrome.exe", shell=True)
+    arduinoSerialData.close()
+    exit()
