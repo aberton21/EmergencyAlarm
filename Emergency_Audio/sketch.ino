@@ -19,7 +19,7 @@ void loop() {
   if (state == HIGH)
     Serial.println("Switch: OFF");
   else
-    Serial.println("Switch: ON
+    Serial.println("Switch: ON");
       
   delay(1000);
 }
